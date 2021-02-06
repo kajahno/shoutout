@@ -21,6 +21,10 @@ Then install packages with:
 
 * login: `npx firebase login`
 
+### shell aliases
+
+* serve: runs the app locally
+* deploy: deploys the cloud functions to firebase
 
 ## components used
 

@@ -4,45 +4,42 @@ const { firestore } = require("firebase-admin");
 
 admin.initializeApp();
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello world!!");
-});
+const express = require('express');
+const app = express();
 
-exports.getShoutouts = functions.https.onRequest((req, res) => {
+app.get("/shoutouts", (req, res) => {
     admin
         .firestore()
         .collection("shoutouts")
+        .orderBy("createdAt", "desc")
         .get()
         .then( data => {
             let shoutouts = [];
-            data.docs.forEach( d => shoutouts.push(d.data()));
+            data.docs.forEach( d => shoutouts.push({ 
+                shoutoutId: d.id,
+                ...d.data() 
+            }));
             return res.json(shoutouts);
         })
         .catch( error => console.log(error))
 });
 
-exports.createShoutout = functions.https.onRequest((req, res) => {
-
-    if (req.method !== "POST"){
-        return res.status(400).json({ error: "method not allowed" });
-    }
+app.post("/shoutout", (req, res) => {
 
     const newShoutout = {
         userHandle: req.body.userHandle,
         body: req.body.body,
-        createdAt: admin.firestore.Timestamp.fromDate(new Date())
+        createdAt: new Date().toISOString()
     };
 
     admin
-        .firestore()
-        .collection("shoutouts")
-        .add(newShoutout)
-        .then( doc => {
-            res.status(201).json({ message: `${doc.id} created successfully`})
-        })
-        .catch( error => res.status(500).json({ error: "internal error" }));
+    .firestore()
+    .collection("shoutouts")
+    .add(newShoutout)
+    .then( doc => {
+        res.status(201).json({ message: `${doc.id} created successfully`})
+    })
+    .catch( error => res.status(500).json({ error: "internal error" }));
 });
+
+exports.api = functions.region("europe-west2").https.onRequest(app);
