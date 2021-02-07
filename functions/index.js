@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const { getAllShoutouts, createShoutout } = require("./handlers/shoutouts");
-const { signupUser, loginUser } = require("./handlers/users");
+const { signupUser, loginUser, uploadImage } = require("./handlers/users");
 
 const FBAuth  = require("./utils/FBAuth");
 
@@ -16,5 +16,6 @@ app.post("/shoutout", FBAuth, createShoutout );
 // User routes
 app.post("/signup", signupUser );
 app.post("/login", loginUser);
+app.post("/user/image", FBAuth, uploadImage);
 
 exports.api = functions.region("europe-west2").https.onRequest(app);

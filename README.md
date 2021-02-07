@@ -28,6 +28,8 @@ Then install packages with:
 
 ## components used
 
+* nodejs: back-end language
+  * busyboy: package to help with image uploads
 * nixpkgs: to real with the dependencies and set-up dev environment
 * firebase: it's the back-end
 * express: to group http endpoints and make them more configurable
