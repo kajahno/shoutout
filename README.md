@@ -33,3 +33,7 @@ Then install packages with:
 * express: to group http endpoints and make them more configurable
   * by default firebase's endpoints are hard to customize
 
+## Firebase client authentication config
+
+* Place them in an .env file
+* Your credentials can be found in the firebase dashboard > project settings
