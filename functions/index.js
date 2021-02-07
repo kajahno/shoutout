@@ -23,7 +23,42 @@ firebase.initializeApp(firebaseConfig);
 
 const db = admin.firestore();
 
-app.get("/shoutouts", (req, res) => {
+const FBAuth = (req, res, next) => {
+    let token;
+
+    if (
+        req.headers.authorization &&
+        req.headers.authorization.startsWith("Bearer ")
+    ) {
+        token = req.headers.authorization.split("Bearer ")[1];
+    } else {
+        console.error("No token found");
+        res.status(403).json({ error: "Unauthorized" });
+    }
+
+    admin
+        .auth()
+        .verifyIdToken(token)
+        .then((decodedToken) => {
+            req.user = decodedToken;
+            console.log(decodedToken);
+            return db
+                .collection("users")
+                .where("userId", "==", req.user.uid)
+                .limit(1)
+                .get();
+        })
+        .then((data) => {
+            req.user.handle = data.docs[0].data().handle;
+            return next();
+        })
+        .catch((error) => {
+            console.error("Error while verifying token", error);
+            return res.status(403).json(error);
+        });
+};
+
+app.get("/shoutouts", FBAuth, (req, res) => {
     db.collection("shoutouts")
         .orderBy("createdAt", "desc")
         .get()
@@ -40,9 +75,9 @@ app.get("/shoutouts", (req, res) => {
         .catch((error) => console.error(error));
 });
 
-app.post("/shoutout", (req, res) => {
+app.post("/shoutout", FBAuth, (req, res) => {
     const newShoutout = {
-        userHandle: req.body.userHandle,
+        userHandle: req.user.handle,
         body: req.body.body,
         createdAt: new Date().toISOString(),
     };
@@ -158,11 +193,9 @@ app.post("/login", (req, res) => {
             console.error(error);
 
             if (error.code === "auth/wrong-password") {
-                return res
-                    .status(403)
-                    .json({
-                        general: "email does not exist or password is invalid",
-                    });
+                return res.status(403).json({
+                    general: "email does not exist or password is invalid",
+                });
             }
             return res.status(500).json({ error: error.code });
         });
