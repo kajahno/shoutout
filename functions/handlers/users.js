@@ -120,11 +120,9 @@ exports.uploadImage = (req, res) => {
         allowedMimeTypes = ["image/jpeg", "image/png"];
         if (!(mimetype in allowedMimeTypes)) {
             console.error(`mimetype not allowed: ${mimetype}`);
-            return res
-                .status(400)
-                .json({
-                    error: `invalid mimetype. Allowed values are: '${allowedMimeTypes}'`,
-                });
+            return res.status(400).json({
+                error: `invalid mimetype. Allowed values are: '${allowedMimeTypes}'`,
+            });
         }
 
         const imageExtension = path.extname(filename);
@@ -180,6 +178,33 @@ exports.addUserDetails = (req, res) => {
         .update(userDetails)
         .then(() => {
             return res.json({ message: "details updated successfully" });
+        })
+        .catch((error) => {
+            console.error(error);
+            return res.status(500).json({ error: error.code });
+        });
+};
+
+exports.getUserDetails = (req, res) => {
+    let userDetails = {};
+    db.doc(`/users/${req.user.handle}`)
+        .get()
+        .then((doc) => {
+            if (doc.exists) {
+                userDetails.credentials = doc.data();
+                return db
+                    .collection("likes")
+                    .where("userHandle", "==", req.user.handle)
+                    .get();
+            }
+            return res.status(404).json({ error: "document not found" });
+        })
+        .then((data) => {
+            userDetails.likes = [];
+            data.forEach((doc) => {
+                userDetails.likes.push(doc.data());
+            });
+            return res.json(userDetails);
         })
         .catch((error) => {
             console.error(error);
