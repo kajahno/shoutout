@@ -4,7 +4,11 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const { getAllShoutouts, createShoutout } = require("./handlers/shoutouts");
+const {
+    getAllShoutouts,
+    createShoutout,
+    getShoutout,
+} = require("./handlers/shoutouts");
 const {
     signupUser,
     loginUser,
@@ -18,6 +22,13 @@ const FBAuth = require("./utils/FBAuth");
 // Shoutout routes
 app.get("/shoutouts", FBAuth, getAllShoutouts);
 app.post("/shoutout", FBAuth, createShoutout);
+app.get("/shoutout/:shoutoutId", getShoutout);
+// TODO: delete a shoutout
+// TODO: like a shoutout
+// TODO: unlike a shoutout
+// TODO: add comment on a shoutout
+// TODO: edit comment on a shoutout
+// TODO: remove comment on a shoutout
 
 // User routes
 app.post("/signup", signupUser);
