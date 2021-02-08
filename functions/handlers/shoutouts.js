@@ -22,12 +22,15 @@ exports.createShoutout = (req, res) => {
         userHandle: req.user.handle,
         body: req.body.body,
         createdAt: new Date().toISOString(),
+        imageUrl: req.user.imageUrl,
+        likeCount: 0,
+        commentCount: 0,
     };
 
     db.collection("shoutouts")
         .add(newShoutout)
         .then((doc) => {
-            res.status(201).json({ message: `${doc.id} created successfully` });
+            res.status(201).json({ shoutoutId: doc.id, ...newShoutout });
         })
         .catch((error) => res.status(500).json({ error: "internal error" }));
 };
@@ -85,13 +88,120 @@ exports.addCommentOnShoutout = (req, res) => {
                 imageUrl: req.user.imageUrl,
             };
 
-            return db.collection("comments").add(newComment);
+            return doc.ref.update({ commentCount: doc.data().commentCount + 1 });
         })
+        .then( () => {
+            return db.collection("comments").add(newComment);
+        } )
         .then((doc) => {
             return res.status(201).json({
                 commentId: doc.id,
                 ...newComment,
             });
+        })
+        .catch((error) => {
+            console.error(error);
+            return res.status(500).json({ error: "something went wrong" });
+        });
+};
+
+exports.likeShoutout = (req, res) => {
+    const likedDocumentRef = db
+        .collection(`/likes`)
+        .where("shoutoutId", "==", req.params.shoutoutId)
+        .where("userHandle", "==", req.user.handle)
+        .limit(1);
+
+    const shoutoutRef = db.doc(`/shoutouts/${req.params.shoutoutId}`);
+
+    const newLike = {
+        userHandle: req.user.handle,
+        shoutoutId: req.params.shoutoutId,
+        createdAt: new Date().toISOString(),
+    };
+
+    let shoutoutData = {};
+
+    shoutoutRef
+        .get()
+        .then((doc) => {
+            if (!doc.exists) {
+                return res.status(404).json({ error: "not found" });
+            }
+
+            shoutoutData = {
+                shoutoutId: doc.id,
+                ...doc.data(),
+            };
+            return likedDocumentRef.get();
+        })
+        .then((data) => {
+            if (!data.empty) {
+                return res.status(400).json({ error: "already liked" });
+            }
+
+            return db
+                .collection(`/likes`)
+                .add(newLike)
+                .then(() => {
+                    shoutoutData.likeCount++;
+                    shoutoutRef.update({ likeCount: shoutoutData.likeCount });
+                })
+                .then(() => {
+                    return res.json(shoutoutData);
+                });
+        })
+        .catch((error) => {
+            console.error(error);
+            return res.status(500).json({ error: "something went wrong" });
+        });
+};
+
+exports.unlikeShoutout = (req, res) => {
+    const likedDocumentRef = db
+        .collection(`/likes`)
+        .where("shoutoutId", "==", req.params.shoutoutId)
+        .where("userHandle", "==", req.user.handle)
+        .limit(1);
+
+    const shoutoutRef = db.doc(`/shoutouts/${req.params.shoutoutId}`);
+
+    const newLike = {
+        userHandle: req.user.handle,
+        shoutoutId: req.params.shoutoutId,
+        createdAt: new Date().toISOString(),
+    };
+
+    let shoutoutData = {};
+
+    shoutoutRef
+        .get()
+        .then((doc) => {
+            if (!doc.exists) {
+                return res.status(404).json({ error: "not found" });
+            }
+
+            shoutoutData = {
+                shoutoutId: doc.id,
+                ...doc.data(),
+            };
+            return likedDocumentRef.get();
+        })
+        .then((data) => {
+            if (data.empty) {
+                return res.status(400).json({ error: "not liked" });
+            }
+
+            return db
+                .doc(`/likes/${data.docs[0].id}`)
+                .delete()
+                .then((doc) => {
+                    shoutoutData.likeCount--;
+                    shoutoutRef.update({ likeCount: shoutoutData.likeCount });
+                })
+                .then(() => {
+                    return res.json(shoutoutData);
+                });
         })
         .catch((error) => {
             console.error(error);
