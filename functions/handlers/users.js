@@ -7,6 +7,7 @@ firebase.initializeApp(config);
 const {
     validateSignupData,
     validateLoginData,
+    reduceUserDetails,
 } = require("../utils/validators");
 
 exports.signupUser = (req, res) => {
@@ -117,15 +118,21 @@ exports.uploadImage = (req, res) => {
         console.log(`filename: ${filename}`);
 
         allowedMimeTypes = ["image/jpeg", "image/png"];
-        if (!(mimetype in allowedMimeTypes)){
+        if (!(mimetype in allowedMimeTypes)) {
             console.error(`mimetype not allowed: ${mimetype}`);
-            return res.status(400).json({ error: `invalid mimetype. Allowed values are: '${allowedMimeTypes}'` })
+            return res
+                .status(400)
+                .json({
+                    error: `invalid mimetype. Allowed values are: '${allowedMimeTypes}'`,
+                });
         }
 
         const imageExtension = path.extname(filename);
 
-        if (imageExtension === ""){
-            return res.status(400).json({ error: "filename must have an extension" })
+        if (imageExtension === "") {
+            return res
+                .status(400)
+                .json({ error: "filename must have an extension" });
         }
 
         imageFilename = `${Math.round(
@@ -164,4 +171,18 @@ exports.uploadImage = (req, res) => {
             });
     });
     busboy.end(req.rawBody);
+};
+
+exports.addUserDetails = (req, res) => {
+    let userDetails = reduceUserDetails(req.body);
+
+    db.doc(`/users/${req.user.handle}`)
+        .update(userDetails)
+        .then(() => {
+            return res.json({ message: "details updated successfully" });
+        })
+        .catch((error) => {
+            console.error(error);
+            return res.status(500).json({ error: error.code });
+        });
 };
