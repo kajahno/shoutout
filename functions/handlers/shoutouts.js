@@ -60,3 +60,41 @@ exports.getShoutout = (req, res) => {
             return res.status(500).json({ error: error.code });
         });
 };
+
+exports.addCommentOnShoutout = (req, res) => {
+    if (req.body.body.trim() === "") {
+        return res.status(400).json({ body: "field must not be empty" });
+    }
+
+    let newComment;
+
+    db.doc(`/shoutouts/${req.params.shoutoutId}`)
+        .get()
+        .then((doc) => {
+            if (!doc.exists) {
+                return res
+                    .status(404)
+                    .json({ error: "shoutout doesn't exist" });
+            }
+
+            newComment = {
+                shoutoutId: req.params.shoutoutId,
+                userHandle: req.user.handle,
+                createdAt: new Date().toISOString(),
+                body: req.body.body,
+                imageUrl: req.user.imageUrl,
+            };
+
+            return db.collection("comments").add(newComment);
+        })
+        .then((doc) => {
+            return res.status(201).json({
+                commentId: doc.id,
+                ...newComment,
+            });
+        })
+        .catch((error) => {
+            console.error(error);
+            return res.status(500).json({ error: "something went wrong" });
+        });
+};
