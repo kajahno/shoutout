@@ -88,11 +88,13 @@ exports.addCommentOnShoutout = (req, res) => {
                 imageUrl: req.user.imageUrl,
             };
 
-            return doc.ref.update({ commentCount: doc.data().commentCount + 1 });
+            return doc.ref.update({
+                commentCount: doc.data().commentCount + 1,
+            });
         })
-        .then( () => {
+        .then(() => {
             return db.collection("comments").add(newComment);
-        } )
+        })
         .then((doc) => {
             return res.status(201).json({
                 commentId: doc.id,
@@ -206,5 +208,30 @@ exports.unlikeShoutout = (req, res) => {
         .catch((error) => {
             console.error(error);
             return res.status(500).json({ error: "something went wrong" });
+        });
+};
+
+exports.deleteShoutout = (req, res) => {
+    console.log("key");
+    const shoutoutRef = db.doc(`/shoutouts/${req.params.shoutoutId}`);
+    shoutoutRef
+        .get()
+        .then((doc) => {
+            if (!doc.exists) {
+                return res.status(404).json({ error: "not found" });
+            }
+
+            if (req.user.handle !== doc.data().userHandle) {
+                return res.status(403).json({ error: "unauthorized" });
+            }
+
+            return shoutoutRef.delete();
+        })
+        .then(() => {
+            return res.status(200).json({ message: "deleted successfully" });
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({ error: "internal server error" });
         });
 };

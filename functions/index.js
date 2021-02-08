@@ -11,6 +11,7 @@ const {
     addCommentOnShoutout,
     likeShoutout,
     unlikeShoutout,
+    deleteShoutout,
 } = require("./handlers/shoutouts");
 const {
     signupUser,
@@ -26,7 +27,7 @@ const FBAuth = require("./utils/FBAuth");
 app.get("/shoutouts", FBAuth, getAllShoutouts);
 app.post("/shoutout", FBAuth, createShoutout);
 app.get("/shoutout/:shoutoutId", getShoutout);
-// TODO: delete a shoutout
+app.delete("/shoutout/:shoutoutId", FBAuth, deleteShoutout);
 app.post("/shoutout/:shoutoutId/like", FBAuth, likeShoutout);
 app.post("/shoutout/:shoutoutId/unlike", FBAuth, unlikeShoutout);
 app.post("/shoutout/:shoutoutId/comment", FBAuth, addCommentOnShoutout);
