@@ -128,6 +128,7 @@ exports.likeShoutout = (req, res) => {
         .get()
         .then((doc) => {
             if (!doc.exists) {
+                console.error(`not found /shoutouts/${req.params.shoutoutId}`);
                 return res.status(404).json({ error: "not found" });
             }
 
@@ -232,6 +233,23 @@ exports.deleteShoutout = (req, res) => {
         })
         .catch((error) => {
             console.error(error);
-            res.status(500).json({ error: "internal server error" });
+            res.status(500).json({ error: error.code });
+        });
+};
+
+exports.markNotificationsRead = (req, res) => {
+    let batch = db.batch();
+    req.body.forEach((notificationId) => {
+        const notification = db.doc(`/notifications/${notificationId}`);
+        batch.update(notification, { read: true });
+    });
+    batch
+        .commit()
+        .then(() => {
+            return res.json({ message: "notifications marked as read" });
+        })
+        .catch((error) => {
+            console.error(error);
+            return res.status(500).json({ error: error.code });
         });
 };

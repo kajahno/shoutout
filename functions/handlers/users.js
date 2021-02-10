@@ -190,24 +190,70 @@ exports.getUserDetails = (req, res) => {
     db.doc(`/users/${req.user.handle}`)
         .get()
         .then((doc) => {
-            if (doc.exists) {
-                userDetails.credentials = doc.data();
-                return db
-                    .collection("likes")
-                    .where("userHandle", "==", req.user.handle)
-                    .get();
+            if (!doc.exists) {
+                return res.status(404).json({ error: "document not found" });
             }
-            return res.status(404).json({ error: "document not found" });
+            userDetails.credentials = doc.data();
+            return db
+                .collection("likes")
+                .where("userHandle", "==", req.user.handle)
+                .get();
         })
         .then((data) => {
             userDetails.likes = [];
             data.forEach((doc) => {
                 userDetails.likes.push(doc.data());
             });
+            return db
+                .collection("notifications")
+                .where("recipient", "==", req.user.handle)
+                .orderBy("createdAt", "desc")
+                .limit(10)
+                .get();
+        })
+        .then((data) => {
+            userDetails.notifications = [];
+            data.forEach((doc) => {
+                userDetails.notifications.push({
+                    notificationId: doc.id,
+                    ...doc.data(),
+                });
+            });
             return res.json(userDetails);
         })
         .catch((error) => {
             console.error(error);
             return res.status(500).json({ error: error.code });
+        });
+};
+
+exports.getUserPublicDetails = (req, res) => {
+    let userDetails = {};
+    db.doc(`/users/${req.params.handle}`)
+        .get()
+        .then((doc) => {
+            if (!doc.exists) {
+                return res.status(404).json({ error: "not found" });
+            }
+            userDetails.user = doc.data();
+            return db
+                .collection("shoutouts")
+                .where("userHandle", "==", req.params.handle)
+                .orderBy("createdAt", "desc")
+                .get();
+        })
+        .then((snapshot) => {
+            userDetails.shoutouts = [];
+            snapshot.forEach((doc) => {
+                userDetails.shoutouts.push({
+                    shoutoutId: doc.id,
+                    ...doc.data(),
+                });
+            });
+            return res.json(userDetails);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({ error: "internal server error" });
         });
 };
