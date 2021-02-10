@@ -53,31 +53,31 @@ exports.createNotificationOnLike = functions
     .region(config.gcpRegion)
     .firestore.document("likes/{id}")
     .onCreate((snapshot) => {
-        db.doc(`/shoutouts/${snapshot.data().shoutoutId}`)
+        return db
+            .doc(`/shoutouts/${snapshot.data().shoutoutId}`)
             .get()
             .then((doc) => {
-                if (!doc.exists) {
-                    console.error(
-                        `document /shoutouts/${
-                            snapshot.data().shoutoutId
-                        } doesnt exist`
-                    );
+                if (
+                    doc.exists &&
+                    doc.data().userHandle !== snapshot.data().userHandle
+                ) {
+                    return db.doc(`/notifications/${snapshot.id}`).set({
+                        createdAt: new Date().toISOString(),
+                        recipient: doc.data().userHandle,
+                        sender: snapshot.data().userHandle,
+                        type: "like",
+                        read: false,
+                        shoutoutId: doc.id,
+                    });
                 }
-                return db.doc(`/notifications/${snapshot.id}`).set({
-                    createdAt: new Date().toISOString(),
-                    recipient: doc.data().userHandle,
-                    sender: snapshot.data().userHandle,
-                    type: "like",
-                    read: false,
-                    shoutoutId: doc.id,
-                });
-            })
-            .then(() => {
-                return;
+                console.error(
+                    `document /shoutouts/${
+                        snapshot.data().shoutoutId
+                    } doesnt exist`
+                );
             })
             .catch((error) => {
                 console.error(error);
-                return;
             });
     });
 
@@ -85,14 +85,11 @@ exports.deleteNotificationOnUnlike = functions
     .region(config.gcpRegion)
     .firestore.document("likes/{id}")
     .onDelete((snapshot) => {
-        db.doc(`/notifications/${snapshot.id}`)
+        return db
+            .doc(`/notifications/${snapshot.id}`)
             .delete()
-            .then(() => {
-                return;
-            })
             .catch((error) => {
                 console.error(error);
-                return;
             });
     });
 
@@ -100,32 +97,32 @@ exports.createNotificationOnComment = functions
     .region(config.gcpRegion)
     .firestore.document("comments/{id}")
     .onCreate((snapshot) => {
-        db.doc(`/shoutouts/${snapshot.data().shoutoutId}`)
+        return db
+            .doc(`/shoutouts/${snapshot.data().shoutoutId}`)
             .get()
             .then((doc) => {
-                if (!doc.exists) {
-                    console.error(
-                        `document /shoutouts/${
-                            snapshot.data().shoutoutId
-                        } doesnt exist`
-                    );
+                if (
+                    doc.exists &&
+                    doc.data().userHandle !== snapshot.data().userHandle
+                ) {
+                    return db
+                        .doc(`/notifications/${snapshot.data().shoutoutId}`)
+                        .set({
+                            createdAt: new Date().toISOString(),
+                            recipient: doc.data().userHandle,
+                            sender: snapshot.data().userHandle,
+                            type: "comment",
+                            read: false,
+                            shoutoutId: doc.id,
+                        });
                 }
-                return db
-                    .doc(`/notifications/${snapshot.data().shoutoutId}`)
-                    .set({
-                        createdAt: new Date().toISOString(),
-                        recipient: doc.data().userHandle,
-                        sender: snapshot.data().userHandle,
-                        type: "comment",
-                        read: false,
-                        shoutoutId: doc.id,
-                    });
-            })
-            .then(() => {
-                return;
+                console.error(
+                    `document /shoutouts/${
+                        snapshot.data().shoutoutId
+                    } doesnt exist`
+                );
             })
             .catch((error) => {
                 console.error(error);
-                return;
             });
     });
