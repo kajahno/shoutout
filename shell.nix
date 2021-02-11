@@ -21,16 +21,16 @@ in pkgs.mkShell rec {
   
     buildInputs = with pkgs; [
         nodejs-12
-        (yarn.override { nodejs = nodejs-12; })
+        # (yarn.override { nodejs = nodejs-12; })
         openjdk-15
     ];
 
     shellHook = ''
         export PATH="$PWD/node_modules/.bin/:$PATH"
-        npm install firebase-tools
+        npx firebase --help >/dev/null || npm install firebase-tools
+        npx create-react-app --help >/dev/null || npm install create-react-app
         alias deploy="npx firebase deploy"
         alias serve="npx firebase serve"
         alias emulators="npx firebase emulators:start"
-        alias firebase="npx firebase"
     '';
 }
