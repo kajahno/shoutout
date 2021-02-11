@@ -51,7 +51,7 @@ exports.api = functions.region(config.gcpRegion).https.onRequest(app);
 
 exports.createNotificationOnLike = functions
     .region(config.gcpRegion)
-    .firestore.document("likes/{id}")
+    .firestore.document("/likes/{id}")
     .onCreate((snapshot) => {
         return db
             .doc(`/shoutouts/${snapshot.data().shoutoutId}`)
@@ -83,7 +83,7 @@ exports.createNotificationOnLike = functions
 
 exports.deleteNotificationOnUnlike = functions
     .region(config.gcpRegion)
-    .firestore.document("likes/{id}")
+    .firestore.document("/likes/{id}")
     .onDelete((snapshot) => {
         return db
             .doc(`/notifications/${snapshot.id}`)
@@ -95,7 +95,7 @@ exports.deleteNotificationOnUnlike = functions
 
 exports.createNotificationOnComment = functions
     .region(config.gcpRegion)
-    .firestore.document("comments/{id}")
+    .firestore.document("/comments/{id}")
     .onCreate((snapshot) => {
         return db
             .doc(`/shoutouts/${snapshot.data().shoutoutId}`)
@@ -121,6 +121,77 @@ exports.createNotificationOnComment = functions
                         snapshot.data().shoutoutId
                     } doesnt exist`
                 );
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    });
+
+exports.onUserImageChange = functions
+    .region(config.gcpRegion)
+    .firestore.document("/users/{id}")
+    .onUpdate((change) => {
+        console.log(change.before.data());
+        console.log(change.after.data());
+        if (change.before.data().imageUrl !== change.after.data().imageUrl) {
+            const batch = db.batch();
+            return db
+                .collection(`shoutouts`)
+                .where("userHandle", "==", change.before.data().handle)
+                .get()
+                .then((snapshot) => {
+                    snapshot.forEach((doc) => {
+                        let docRef = db.doc(`/shoutouts/${doc.id}`);
+                        batch.update(docRef, {
+                            imageUrl: change.after.data().imageUrl,
+                        });
+                    });
+                    return batch.commit();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    });
+
+exports.onShoutoutDelete = functions
+    .region(config.gcpRegion)
+    .firestore.document("/shoutouts/{shoutoutId}")
+    .onDelete((snapshot, context) => {
+        console.log(`user: ${snapshot.data().userHandle}`);
+        console.log(`shoutoutId: ${context.params.shoutoutId}`);
+        const shoutoutId = context.params.shoutoutId;
+        let batch = db.batch();
+        return db
+            .collection("comments")
+            .where("shoutoutId", "==", shoutoutId)
+            .get()
+            .then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    docRef = db.doc(`/comments/${doc.id}`);
+                    batch.delete(docRef);
+                });
+                return db
+                    .collection("likes")
+                    .where("shoutoutId", "==", shoutoutId)
+                    .get();
+            })
+            .then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    docRef = db.doc(`/likes/${doc.id}`);
+                    batch.delete(docRef);
+                });
+                return db
+                    .collection("notifications")
+                    .where("shoutoutId", "==", shoutoutId)
+                    .get();
+            })
+            .then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    docRef = db.doc(`/notifications/${doc.id}`);
+                    batch.delete(docRef);
+                });
+                return batch.commit();
             })
             .catch((error) => {
                 console.error(error);
