@@ -6,13 +6,18 @@ body {
         "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: rgb(245, 245, 245);
 }
 
 .container {
-  margin: 80px 0 auto 0;
-  max-width: 1200px;
+    margin: 80px auto auto auto;
+    max-width: 1200px;
 }
 
 .nav-container {
-  margin: auto;
+    margin: auto;
+}
+
+a {
+    text-decoration: none;
 }
