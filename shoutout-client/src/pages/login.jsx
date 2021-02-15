@@ -11,7 +11,7 @@ import {
     TextField,
     Typography,
 } from "@material-ui/core";
-import axios from "axios";
+
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 // Redux
