@@ -94,12 +94,15 @@ exports.loginUser = (req, res) => {
         .catch((error) => {
             console.error(error);
 
-            if (error.code === "auth/wrong-password") {
+            if (
+                error.code === "auth/wrong-password" ||
+                error.code === "auth/user-not-found"
+            ) {
                 return res.status(403).json({
                     general: "email does not exist or password is invalid",
                 });
             }
-            return res.status(500).json({ error: error.code });
+            return res.status(500).json({ general: error.code });
         });
 };
 

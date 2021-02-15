@@ -28,7 +28,7 @@ const { db } = require("./utils/admin");
 const config = require("./utils/config");
 
 // Shoutout routes
-app.get("/shoutouts", FBAuth, getAllShoutouts);
+app.get("/shoutouts", getAllShoutouts);
 app.post("/shoutout", FBAuth, createShoutout);
 app.get("/shoutout/:shoutoutId", getShoutout);
 app.delete("/shoutout/:shoutoutId", FBAuth, deleteShoutout);

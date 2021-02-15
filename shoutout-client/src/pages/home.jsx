@@ -6,9 +6,6 @@ import axios from "axios";
 
 import Shoutout from "../components/Shoutout";
 export class home extends Component {
-    // state = {
-    //     shoutouts: null,
-    // };
 
     constructor(props) {
         super(props);
@@ -32,7 +29,7 @@ export class home extends Component {
 
         let recentShoutoutsMarkup = this.state.shoutouts ? (
             this.state.shoutouts.map((shoutout) => {
-                return <Shoutout shoutout={shoutout} />;
+                return <Shoutout key={shoutout.shoutoutId} shoutout={shoutout} />;
             })
         ) : (
             <p>Loading...</p>
@@ -40,10 +37,10 @@ export class home extends Component {
 
         return (
             <Grid container>
-                <Grid sm={8} xs={12}>
+                <Grid item sm={8} xs={12}>
                     {recentShoutoutsMarkup}
                 </Grid>
-                <Grid sm={4} xs={12}>
+                <Grid item sm={4} xs={12}>
                     <p>Profile...</p>
                 </Grid>
             </Grid>
