@@ -61,7 +61,7 @@ class Shoutout extends Component {
                     <Typography variant="body2" color="textSecondary">
                         {dayjs(createdAt).fromNow()}
                     </Typography>
-                    <Typography variant="body1">{body}</Typography>
+                    <Typography variant="body2">{body}</Typography>
                 </CardContent>
             </Card>
         );

@@ -20,7 +20,7 @@ const styles = {
     },
     image: {
         margin: "20px auto 20px auto",
-        height: "30%",
+        height: "80px",
     },
     pageTitle: {
         margin: "10px auto 10px auto",
@@ -74,6 +74,7 @@ class login extends Component {
             .post("/login", userData)
             .then((res) => {
                 console.log(res.data);
+                localStorage.setItem("FBIdToken", `Bearer ${res.data.token}`);
                 this.setState({
                     loading: false,
                 });

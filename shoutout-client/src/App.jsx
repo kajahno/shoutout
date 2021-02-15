@@ -1,12 +1,18 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { ThemeProvider as MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {
+    ThemeProvider as MuiThemeProvider,
+    createMuiTheme,
+} from "@material-ui/core/styles";
 
 import Navbar from "./components/Navbar";
 
 import home from "./pages/home";
 import login from "./pages/login";
 import signup from "./pages/signup";
+import AuthRoute from "./util/AuthRoute";
+
+import jwtDecode from "jwt-decode";
 
 const theme = createMuiTheme({
     palette: {
@@ -28,6 +34,20 @@ const theme = createMuiTheme({
     },
 });
 
+let authenticated = false;
+const token = localStorage.FBIdToken;
+
+if (token) {
+    const decodedToken = jwtDecode(token);
+    if (decodedToken * 1000 < Date.now()) {
+        window.location.ref("/login");
+        authenticated = false;
+    }
+    {
+        authenticated = true;
+    }
+}
+
 function App() {
     return (
         <MuiThemeProvider theme={theme}>
@@ -37,8 +57,18 @@ function App() {
                     <div className="container">
                         <Switch>
                             <Route exact path="/" component={home} />
-                            <Route exact path="/login" component={login} />
-                            <Route exact path="/signup" component={signup} />
+                            <AuthRoute
+                                exact
+                                path="/login"
+                                component={login}
+                                authenticated={authenticated}
+                            />
+                            <AuthRoute
+                                exact
+                                path="/signup"
+                                component={signup}
+                                authenticated={authenticated}
+                            />
                         </Switch>
                     </div>
                 </Router>
