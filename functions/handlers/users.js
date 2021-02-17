@@ -121,10 +121,10 @@ exports.uploadImage = (req, res) => {
         console.log(`filename: ${filename}`);
 
         allowedMimeTypes = ["image/jpeg", "image/png"];
-        if (!(mimetype in allowedMimeTypes)) {
+        if (!(allowedMimeTypes.includes(mimetype))) {
             console.error(`mimetype not allowed: ${mimetype}`);
             return res.status(400).json({
-                error: `invalid mimetype. Allowed values are: '${allowedMimeTypes}'`,
+                error: `invalid mimetype '${mimetype}'. Allowed values are: '${allowedMimeTypes}'`,
             });
         }
 

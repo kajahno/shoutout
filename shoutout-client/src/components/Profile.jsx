@@ -11,14 +11,19 @@ import {
     Typography,
     withStyles,
     Button,
+    IconButton,
+    Tooltip,
 } from "@material-ui/core";
 import {
     LocationOn,
     CalendarToday,
     Link as LinkIcon,
+    Edit as EditIcon,
 } from "@material-ui/icons";
+
 // Redux
 import { connect } from "react-redux";
+import { logoutUser, uploadImage } from "../redux/actions/userActions";
 
 // Icons
 
@@ -72,6 +77,18 @@ const styles = {
 };
 
 class Profile extends Component {
+    handleImageChange = (event) => {
+        const image = event.target.files[0];
+        const formData = new FormData();
+        formData.append("image", image, image.name);
+        this.props.uploadImage(formData);
+    };
+
+    handleEditPicture = () => {
+        const fileInput = document.getElementById("imageInput");
+        fileInput.click();
+    };
+
     render() {
         const {
             classes,
@@ -94,7 +111,28 @@ class Profile extends Component {
                 <Paper className={classes.paper}>
                     <div className={classes.profile}>
                         <div className="image-wrapper">
-                            <img className="profile-image" src={imageUrl} alt="profile picture" />
+                            <img
+                                className="profile-image"
+                                src={imageUrl}
+                                alt="profile picture"
+                            />
+                            <input
+                                type="file"
+                                id="imageInput"
+                                hidden="hidden"
+                                onChange={this.handleImageChange}
+                            />
+                            <Tooltip
+                                title="Edit profile picture"
+                                placement="top"
+                            >
+                                <IconButton
+                                    onClick={this.handleEditPicture}
+                                    className="button"
+                                >
+                                    <EditIcon color="primary" />
+                                </IconButton>
+                            </Tooltip>
                         </div>
                         <hr />
                         <div className="profile-details">
@@ -120,17 +158,16 @@ class Profile extends Component {
                             )}
                             {website && (
                                 <Fragment>
-                                    <LinkIcon color="primary">
-                                    </LinkIcon>
+                                    <LinkIcon color="primary"></LinkIcon>
                                     <a
-                                            href={website}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            {" "}
-                                            {website}
-                                        </a>
-                                        <hr />
+                                        href={website}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {" "}
+                                        {website}
+                                    </a>
+                                    <hr />
                                 </Fragment>
                             )}
                             <CalendarToday color="primary" />{" "}
@@ -177,9 +214,19 @@ const mapStateToProps = (state) => ({
     user: state.user,
 });
 
+const mapActionsToProps = {
+    uploadImage,
+    logoutUser,
+};
+
 Profile.propTypes = {
+    logoutUser: PropTypes.func.isRequired,
+    uploadImage: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     classes: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(Profile));
+export default connect(
+    mapStateToProps,
+    mapActionsToProps
+)(withStyles(styles)(Profile));
