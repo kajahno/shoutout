@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 import dayjs from "dayjs";
 
+import EditDetails from "./EditDetails";
+
 // MUI
 import {
     Link as MuiLink,
@@ -19,6 +21,7 @@ import {
     CalendarToday,
     Link as LinkIcon,
     Edit as EditIcon,
+    KeyboardReturn,
 } from "@material-ui/icons";
 
 // Redux
@@ -87,6 +90,10 @@ class Profile extends Component {
     handleEditPicture = () => {
         const fileInput = document.getElementById("imageInput");
         fileInput.click();
+    };
+
+    handleLogout = () => {
+        this.props.logoutUser();
     };
 
     render() {
@@ -175,6 +182,12 @@ class Profile extends Component {
                                 Joined {dayjs(createdAt).format("MMM YYYY")}
                             </span>
                         </div>
+                        <Tooltip title="logout" placement="top">
+                            <IconButton onClick={this.handleLogout}>
+                                <KeyboardReturn color="primary"></KeyboardReturn>
+                            </IconButton>
+                        </Tooltip>
+                        <EditDetails ></EditDetails>
                     </div>
                 </Paper>
             ) : (
