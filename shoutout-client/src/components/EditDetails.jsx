@@ -3,11 +3,8 @@ import PropTypes from "prop-types";
 
 // MUI
 import {
-    Typography,
     withStyles,
     Button,
-    IconButton,
-    Tooltip,
     Dialog,
     DialogTitle,
     DialogContent,
@@ -21,6 +18,7 @@ import { Edit as EditIcon } from "@material-ui/icons";
 // Redux
 import { connect } from "react-redux";
 import { editUserDetails } from "../redux/actions/userActions";
+import MyButton from "../util/MyButton";
 
 const styles = {
     palette: {
@@ -41,7 +39,7 @@ const styles = {
         margin: "10px auto 10px auto",
     },
     button: {
-        float: "right"
+        float: "right",
     },
     typography: {
         useNextVariants: true,
@@ -105,14 +103,14 @@ class EditDetails extends Component {
 
         return (
             <Fragment>
-                <Tooltip title="Edit details" placement="top">
-                    <IconButton
-                        onClick={this.handleOpen}
-                        className={classes.button}
-                    >
-                        <EditIcon color="primary"></EditIcon>
-                    </IconButton>
-                </Tooltip>
+                <MyButton
+                    tip="Edit details"
+                    onClick={this.handleOpen}
+                    btnClassName={classes.button}
+                    placement="top"
+                >
+                    <EditIcon color="primary"></EditIcon>
+                </MyButton>
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
