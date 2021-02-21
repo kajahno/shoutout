@@ -3,6 +3,8 @@ import {
     SET_UNAUTHENTICATED,
     SET_USER,
     LOADING_USER,
+    LIKE_SHOUTOUT,
+    UNLIKE_SHOUTOUT,
 } from "../types";
 
 const initialState = {
@@ -33,6 +35,27 @@ export default function (state = initialState, action) {
                 ...state,
                 loading: true,
             };
+        case LIKE_SHOUTOUT:
+            return {
+                ...state,
+                likes: [
+                    ...state.likes,
+                    {
+                        userHandle: state.credentials.handle,
+                        shoutoutId: action.payload.shoutoutId,
+                    },
+                ],
+            };
+        case UNLIKE_SHOUTOUT:
+            return {
+                ...state,
+                likes: [
+                    ...state.likes.filter(
+                        (like) => like.shoutoutId !== action.payload.shoutoutId
+                    ),
+                ],
+            };
+
         default:
             return state;
     }

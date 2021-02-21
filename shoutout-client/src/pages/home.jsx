@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import Grid from "@material-ui/core/Grid";
 
@@ -6,31 +7,24 @@ import axios from "axios";
 
 import Shoutout from "../components/Shoutout";
 import Profile from "../components/Profile";
+
+// Redux
+import { connect } from "react-redux";
+import { getShoutouts } from "../redux/actions/dataActions";
+
 export class home extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = { shoutouts: null };
-    }
-
     componentDidMount() {
-        axios
-            .get("/shoutouts")
-            .then((res) => {
-                this.setState({
-                    shoutouts: res.data,
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        this.props.getShoutouts();
     }
 
     render() {
+        const { shoutouts, loading } = this.props.data;
 
-        let recentShoutoutsMarkup = this.state.shoutouts ? (
-            this.state.shoutouts.map((shoutout) => {
-                return <Shoutout key={shoutout.shoutoutId} shoutout={shoutout} />;
+        let recentShoutoutsMarkup = !loading ? (
+            shoutouts.map((shoutout) => {
+                return (
+                    <Shoutout key={shoutout.shoutoutId} shoutout={shoutout} />
+                );
             })
         ) : (
             <p>Loading...</p>
@@ -49,4 +43,13 @@ export class home extends Component {
     }
 }
 
-export default home;
+home.propTypes = {
+    data: PropTypes.object.isRequired,
+    getShoutouts: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+    data: state.data,
+});
+
+export default connect(mapStateToProps, { getShoutouts })(home);
