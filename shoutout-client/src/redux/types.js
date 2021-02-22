@@ -9,6 +9,7 @@ export const SET_SHOUTOUTS = "SET_SHOUTOUTS";
 export const SET_SHOUTOUT = "SET_SHOUTOUT";
 export const LIKE_SHOUTOUT = "LIKE_SHOTUOUT";
 export const UNLIKE_SHOUTOUT = "UNLIKE_SHOUTOUT";
+export const DELETE_SHOUTOUT = "DELETE_SHOUTOUT";
 
 // UI reducer types
 export const SET_ERRORS = "SET_ERRORS";

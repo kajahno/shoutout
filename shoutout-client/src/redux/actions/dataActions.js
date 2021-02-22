@@ -3,6 +3,7 @@ import {
     SET_SHOUTOUTS,
     LIKE_SHOUTOUT,
     UNLIKE_SHOUTOUT,
+    DELETE_SHOUTOUT,
 } from "../types";
 
 import axios from "axios";
@@ -19,7 +20,7 @@ export const getShoutouts = () => (dispatch) => {
                 payload: res.data,
             });
         })
-        .catch((errors) => {
+        .catch((error) => {
             dispatch({
                 type: SET_SHOUTOUTS,
                 payload: [],
@@ -27,7 +28,6 @@ export const getShoutouts = () => (dispatch) => {
         });
 };
 
-// Like a shoutout
 export const likeShoutout = (shoutoutId) => (dispatch) => {
     axios
         .post(`/shoutout/${shoutoutId}/like`)
@@ -37,12 +37,11 @@ export const likeShoutout = (shoutoutId) => (dispatch) => {
                 payload: res.data,
             });
         })
-        .catch((errors) => {
-            console.log(errors);
+        .catch((error) => {
+            console.log(error);
         });
 };
 
-// Unlike a shoutout
 export const unlikeShoutout = (shoutoutId) => (dispatch) => {
     axios
         .post(`/shoutout/${shoutoutId}/unlike`)
@@ -52,7 +51,21 @@ export const unlikeShoutout = (shoutoutId) => (dispatch) => {
                 payload: res.data,
             });
         })
-        .catch((errors) => {
-            console.log(errors);
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+export const deleteShoutout = (shoutoutId) => (dispatch) => {
+    axios
+        .delete(`/shoutout/${shoutoutId}`)
+        .then(() => {
+            dispatch({
+                type: DELETE_SHOUTOUT,
+                payload: shoutoutId,
+            });
+        })
+        .catch((error) => {
+            console.log(error);
         });
 };
