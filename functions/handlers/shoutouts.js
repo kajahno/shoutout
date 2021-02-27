@@ -18,6 +18,10 @@ exports.getAllShoutouts = (req, res) => {
 };
 
 exports.createShoutout = (req, res) => {
+    if (req.body.body.trim() === "") {
+        return res.status(400).json({ body: "field must not be empty" });
+    }
+
     const newShoutout = {
         userHandle: req.user.handle,
         body: req.body.body,

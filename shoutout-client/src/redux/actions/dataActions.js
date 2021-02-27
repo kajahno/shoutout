@@ -4,6 +4,10 @@ import {
     LIKE_SHOUTOUT,
     UNLIKE_SHOUTOUT,
     DELETE_SHOUTOUT,
+    LOADING_UI,
+    SET_ERRORS,
+    CLEAR_ERRORS,
+    POST_SHOUTOUT,
 } from "../types";
 
 import axios from "axios";
@@ -66,6 +70,30 @@ export const deleteShoutout = (shoutoutId) => (dispatch) => {
             });
         })
         .catch((error) => {
+            console.log(error);
+        });
+};
+
+export const postShoutout = (newShoutout) => (dispatch) => {
+    dispatch({
+        type: LOADING_UI,
+    });
+    axios
+        .post(`/shoutout`, newShoutout)
+        .then((res) => {
+            dispatch({
+                type: POST_SHOUTOUT,
+                payload: res.data,
+            });
+            dispatch({
+                type: CLEAR_ERRORS,
+            });
+        })
+        .catch((error) => {
+            dispatch({
+                type: SET_ERRORS,
+                payload: error.response.data,
+            });
             console.log(error);
         });
 };

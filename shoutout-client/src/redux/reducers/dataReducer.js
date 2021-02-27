@@ -4,6 +4,7 @@ import {
     LIKE_SHOUTOUT,
     UNLIKE_SHOUTOUT,
     DELETE_SHOUTOUT,
+    POST_SHOUTOUT,
 } from "../types";
 
 const initialState = {
@@ -43,6 +44,11 @@ export default function (state = initialState, action) {
             state.shoutouts.splice(index, 1);
             return {
                 ...state,
+            };
+        case POST_SHOUTOUT:
+            return {
+                ...state,
+                shoutouts: [action.payload, ...state.shoutouts],
             };
         default:
             return state;

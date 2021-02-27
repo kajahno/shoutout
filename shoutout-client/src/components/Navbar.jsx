@@ -16,6 +16,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
 import MyButton from "../util/MyButton";
+import PostShoutout from "./PostShoutout";
 
 export class Navbar extends Component {
     render() {
@@ -25,9 +26,7 @@ export class Navbar extends Component {
                 <Toolbar className="nav-container">
                     {authenticated ? (
                         <Fragment>
-                            <MyButton tip="Shoutout">
-                                <AddIcon />
-                            </MyButton>
+                            <PostShoutout />
                             <Link to="/">
                                 <MyButton tip="Home">
                                     <HomeIcon />
