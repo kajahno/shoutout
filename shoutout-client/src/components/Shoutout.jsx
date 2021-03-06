@@ -25,6 +25,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 
 import DeleteShoutout from "./DeleteShoutout";
+import ShoutoutDialog from "./ShoutoutDialog";
 
 const styles = {
     card: {
@@ -132,6 +133,10 @@ class Shoutout extends Component {
                         <ChatIcon color="primary" />
                     </MyButton>
                     <span>{commentCount} comments</span>
+                    <ShoutoutDialog
+                        shoutoutId={shoutoutId}
+                        userHandle={userHandle}
+                    />
                 </CardContent>
             </Card>
         );

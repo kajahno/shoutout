@@ -105,7 +105,10 @@ class login extends Component {
                         alt="Shoutout app logo"
                         className={classes.image}
                     />
-                    <Typography variant="h2" className={classes.pageTitle}>
+                    <Typography
+                        variant="h2"
+                        className={classes.pageTitle}
+                    >
                         Login
                     </Typography>
                     <form noValidate onSubmit={this.handleSubmit}>

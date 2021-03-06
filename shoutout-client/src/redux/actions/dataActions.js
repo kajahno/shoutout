@@ -5,9 +5,11 @@ import {
     UNLIKE_SHOUTOUT,
     DELETE_SHOUTOUT,
     LOADING_UI,
+    STOP_LOADING_UI,
     SET_ERRORS,
     CLEAR_ERRORS,
     POST_SHOUTOUT,
+    SET_SHOUTOUT,
 } from "../types";
 
 import axios from "axios";
@@ -29,6 +31,29 @@ export const getShoutouts = () => (dispatch) => {
                 type: SET_SHOUTOUTS,
                 payload: [],
             });
+        });
+};
+
+export const getShoutout = (shoutoutId) => (dispatch) => {
+    dispatch({
+        type: LOADING_UI,
+    });
+    axios
+        .get(`/shoutout/${shoutoutId}`)
+        .then((res) => {
+            dispatch({
+                type: SET_SHOUTOUT,
+                payload: res.data,
+            });
+            dispatch({
+                type: STOP_LOADING_UI
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            // dispatch({
+            //     type: STOP_LOADING_UI
+            // });
         });
 };
 
@@ -96,4 +121,8 @@ export const postShoutout = (newShoutout) => (dispatch) => {
             });
             console.log(error);
         });
+};
+
+export const clearErrors = () => (dispatch) => {
+    dispatch({ type: CLEAR_ERRORS });
 };

@@ -5,11 +5,12 @@ import {
     UNLIKE_SHOUTOUT,
     DELETE_SHOUTOUT,
     POST_SHOUTOUT,
+    SET_SHOUTOUT,
 } from "../types";
 
 const initialState = {
     shoutouts: [],
-    shoutout: [],
+    shoutout: {},
     loading: false,
 };
 
@@ -26,6 +27,11 @@ export default function (state = initialState, action) {
                 ...state,
                 shoutouts: action.payload,
                 loading: false,
+            };
+        case SET_SHOUTOUT:
+            return {
+                ...state,
+                shoutout: action.payload,
             };
         case LIKE_SHOUTOUT:
         case UNLIKE_SHOUTOUT:

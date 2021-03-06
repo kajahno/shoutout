@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 // Redux
 import { connect } from "react-redux";
-import { postShoutout } from "../redux/actions/dataActions";
+import { postShoutout, clearErrors } from "../redux/actions/dataActions";
 
 import MyButton from "../util/MyButton";
 
@@ -26,18 +26,20 @@ import {
 const styles = {
     submitButton: {
         position: "relative",
-        marginTop: "5px",
+        marginTop: "10px",
+        float: "right",
     },
     progressSpinner: {
         position: "absolute",
     },
     closeButton: {
         position: "absolute",
-        left: "90%",
+        left: "91%",
         top: "10%",
     },
     dialogTitle: {
         position: "relative",
+        paddingBottom: 0,
     },
 };
 
@@ -60,8 +62,9 @@ class PostShoutout extends Component {
         if (!nextProps.UI.errors && !nextProps.UI.loading) {
             this.setState({
                 body: "",
+                open: false,
+                errors: "",
             });
-            this.handleClose();
         }
     }
 
@@ -72,10 +75,7 @@ class PostShoutout extends Component {
     };
 
     handleClose = () => {
-        this.setState({
-            open: false,
-            errors: ""
-        });
+        this.props.clearErrors();
     };
 
     handleChange = (event) => {
@@ -158,6 +158,7 @@ class PostShoutout extends Component {
 
 PostShoutout.propTypes = {
     postShoutout: PropTypes.func.isRequired,
+    clearErrors: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
     UI: PropTypes.object.isRequired,
 };
@@ -166,6 +167,6 @@ const mapStateToProps = (state) => ({
     UI: state.UI,
 });
 
-export default connect(mapStateToProps, { postShoutout })(
+export default connect(mapStateToProps, { postShoutout, clearErrors })(
     withStyles(styles)(PostShoutout)
 );
