@@ -6,6 +6,7 @@ import {
     DELETE_SHOUTOUT,
     POST_SHOUTOUT,
     SET_SHOUTOUT,
+    SUBMIT_COMMENT,
 } from "../types";
 
 const initialState = {
@@ -60,6 +61,14 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 shoutouts: [action.payload, ...state.shoutouts],
+            };
+        case SUBMIT_COMMENT:
+            return {
+                ...state,
+                shoutout: {
+                    ...state.shoutout,
+                    comments: [action.payload, ...state.shoutout.comments],
+                },
             };
         default:
             return state;

@@ -11,6 +11,7 @@ export const LIKE_SHOUTOUT = "LIKE_SHOTUOUT";
 export const UNLIKE_SHOUTOUT = "UNLIKE_SHOUTOUT";
 export const DELETE_SHOUTOUT = "DELETE_SHOUTOUT";
 export const POST_SHOUTOUT = "POST_SHOUTOUT";
+export const SUBMIT_COMMENT = "SUBMIT_COMMENT";
 
 // UI reducer types
 export const SET_ERRORS = "SET_ERRORS";

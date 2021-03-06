@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 
 // Redux
 import { connect } from "react-redux";
-import { getShoutout } from "../../redux/actions/dataActions";
+import { getShoutout, clearErrors } from "../../redux/actions/dataActions";
 
 // Icons
 import {
@@ -27,6 +27,7 @@ import {
 import MyButton from "../../util/MyButton";
 import LikeButton from "./LikeButton";
 import Comments from "./Comments";
+import CommentForm from "./CommentForm";
 
 const styles = {
     expandButton: {
@@ -78,6 +79,7 @@ class ShoutoutDialog extends Component {
     };
     handleClose = () => {
         this.setState({ open: false });
+        this.props.clearErrors();
     };
 
     render() {
@@ -132,6 +134,7 @@ class ShoutoutDialog extends Component {
                     <span>{commentCount} comments</span>
                 </Grid>
                 <hr className={classes.visibleSeparator} />
+                <CommentForm shoutoutId={shoutoutId} />
                 <Comments comments={comments} />
             </Grid>
         );
@@ -182,6 +185,7 @@ const mapStateToProps = (state) => ({
 
 const mapActionsToProps = {
     getShoutout,
+    clearErrors,
 };
 
 export default connect(

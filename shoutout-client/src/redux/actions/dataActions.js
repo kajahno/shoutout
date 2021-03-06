@@ -10,6 +10,7 @@ import {
     CLEAR_ERRORS,
     POST_SHOUTOUT,
     SET_SHOUTOUT,
+    SUBMIT_COMMENT,
 } from "../types";
 
 import axios from "axios";
@@ -46,7 +47,7 @@ export const getShoutout = (shoutoutId) => (dispatch) => {
                 payload: res.data,
             });
             dispatch({
-                type: STOP_LOADING_UI
+                type: STOP_LOADING_UI,
             });
         })
         .catch((err) => {
@@ -85,6 +86,24 @@ export const unlikeShoutout = (shoutoutId) => (dispatch) => {
         });
 };
 
+export const submitComment = (shoutoutId, commentData) => (dispatch) => {
+    axios
+        .post(`/shoutout/${shoutoutId}/comment`, commentData)
+        .then((res) => {
+            dispatch({
+                type: SUBMIT_COMMENT,
+                payload: res.data,
+            });
+            dispatch(clearErrors());
+        })
+        .catch((error) => {
+            dispatch({
+                type: SET_ERRORS,
+                payload: error.response.data,
+            });
+        });
+};
+
 export const deleteShoutout = (shoutoutId) => (dispatch) => {
     axios
         .delete(`/shoutout/${shoutoutId}`)
@@ -110,9 +129,7 @@ export const postShoutout = (newShoutout) => (dispatch) => {
                 type: POST_SHOUTOUT,
                 payload: res.data,
             });
-            dispatch({
-                type: CLEAR_ERRORS,
-            });
+            dispatch(clearErrors());
         })
         .catch((error) => {
             dispatch({
