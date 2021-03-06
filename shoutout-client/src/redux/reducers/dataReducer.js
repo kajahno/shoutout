@@ -39,6 +39,11 @@ export default function (state = initialState, action) {
                 (shoutout) => shoutout.shoutoutId === action.payload.shoutoutId
             );
             state.shoutouts[index] = action.payload;
+
+            if (state.shoutout.shoutoutId === action.payload.shoutoutId) {
+                state.shoutout = action.payload;
+            }
+
             return {
                 ...state,
                 shoutout: action.payload,

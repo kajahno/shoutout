@@ -11,27 +11,28 @@ import MyButton from "../util/MyButton";
 
 // Icons
 import {
-    Add as AddIcon,
     Close as CloseIcon,
     UnfoldMore,
+    Chat as ChatIcon,
 } from "@material-ui/icons/";
 
 // MUI
 import {
-    Button,
     CircularProgress,
     Dialog,
-    DialogActions,
     DialogContent,
-    DialogTitle,
     Grid,
     Link,
-    TextField,
     Typography,
 } from "@material-ui/core/";
 
+import LikeButton from "./LikeButton";
+
 const styles = {
-    expandButton: {},
+    expandButton: {
+        position: "absolute",
+        left: "90%",
+    },
     closeButton: {
         position: "absolute",
         left: "90%",
@@ -48,6 +49,11 @@ const styles = {
     invisibleSeparator: {
         border: "none",
         margin: 4,
+    },
+    spinnerDiv: {
+        textAlign: "center",
+        marginTop: 10,
+        marginBottom: 10,
     },
 };
 
@@ -85,7 +91,9 @@ class ShoutoutDialog extends Component {
         } = this.props;
 
         const dialogMarkup = loading ? (
-            <CircularProgress size={200} />
+            <div className={classes.spinnerDiv}>
+                <CircularProgress size={200} thickness={2} />
+            </div>
         ) : (
             <Grid container spacing={16}>
                 <Grid item sm={5}>
@@ -110,6 +118,12 @@ class ShoutoutDialog extends Component {
                     </Typography>
                     <hr className={classes.invisibleSeparator} />
                     <Typography variant="body1">{body}</Typography>
+                    <LikeButton shoutoutId={shoutoutId} />
+                    <span>{likeCount} likes</span>
+                    <MyButton tip="comments">
+                        <ChatIcon color="primary" />
+                    </MyButton>
+                    <span>{commentCount} comments</span>
                 </Grid>
             </Grid>
         );
@@ -129,10 +143,6 @@ class ShoutoutDialog extends Component {
                     fullWidth
                     maxWidth="sm"
                 >
-                    {/* <DialogTitle className={classes.dialogTitle}>
-                        Post a shoutout!
-
-                    </DialogTitle> */}
                     <MyButton
                         tip="Close"
                         onClick={this.handleClose}
