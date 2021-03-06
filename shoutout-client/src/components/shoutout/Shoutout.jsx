@@ -16,7 +16,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 // Redux
 import { connect } from "react-redux";
 
-import MyButton from "../util/MyButton";
 
 // Icons
 import ChatIcon from "@material-ui/icons/Chat";
@@ -24,6 +23,8 @@ import ChatIcon from "@material-ui/icons/Chat";
 import DeleteShoutout from "./DeleteShoutout";
 import ShoutoutDialog from "./ShoutoutDialog";
 import LikeButton from "./LikeButton";
+import MyButton from "../../util/MyButton";
+
 
 const styles = {
     card: {

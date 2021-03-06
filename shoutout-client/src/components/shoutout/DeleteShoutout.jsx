@@ -4,9 +4,9 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 // Redux
 import { connect } from "react-redux";
-import { deleteShoutout } from "../redux/actions/dataActions";
+import { deleteShoutout } from "../../redux/actions/dataActions";
 
-import MyButton from "../util/MyButton";
+import MyButton from "../../util/MyButton";
 
 // Icons
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";

@@ -15,8 +15,8 @@ import AddIcon from "@material-ui/icons/Add";
 import HomeIcon from "@material-ui/icons/Home";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
-import MyButton from "../util/MyButton";
-import PostShoutout from "./PostShoutout";
+import MyButton from "../../util/MyButton";
+import PostShoutout from "../shoutout/PostShoutout";
 
 export class Navbar extends Component {
     render() {

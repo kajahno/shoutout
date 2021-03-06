@@ -5,7 +5,7 @@ import {
     createMuiTheme,
 } from "@material-ui/core/styles";
 
-import Navbar from "./components/Navbar";
+import Navbar from "./components/layout/Navbar";
 
 import home from "./pages/home";
 import login from "./pages/login";

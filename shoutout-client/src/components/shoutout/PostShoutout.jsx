@@ -4,9 +4,9 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 // Redux
 import { connect } from "react-redux";
-import { postShoutout, clearErrors } from "../redux/actions/dataActions";
+import { postShoutout, clearErrors } from "../../redux/actions/dataActions";
 
-import MyButton from "../util/MyButton";
+import MyButton from "../../util/MyButton";
 
 // Icons
 import { Add as AddIcon, Close as CloseIcon } from "@material-ui/icons/";

@@ -3,10 +3,8 @@ import PropTypes from "prop-types";
 
 import Grid from "@material-ui/core/Grid";
 
-import axios from "axios";
-
-import Shoutout from "../components/Shoutout";
-import Profile from "../components/Profile";
+import Shoutout from "../components/shoutout/Shoutout";
+import Profile from "../components/profile/Profile";
 
 // Redux
 import { connect } from "react-redux";

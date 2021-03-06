@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import MyButton from "../util/MyButton";
+import MyButton from "../../util/MyButton";
 
 // Redux
 import { connect } from "react-redux";
-import { likeShoutout, unlikeShoutout } from "../redux/actions/dataActions";
+import { likeShoutout, unlikeShoutout } from "../../redux/actions/dataActions";
 
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";

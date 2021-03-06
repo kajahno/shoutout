@@ -24,8 +24,8 @@ import {
 
 // Redux
 import { connect } from "react-redux";
-import { logoutUser, uploadImage } from "../redux/actions/userActions";
-import MyButton from "../util/MyButton";
+import { logoutUser, uploadImage } from "../../redux/actions/userActions";
+import MyButton from "../../util/MyButton";
 
 // Icons
 

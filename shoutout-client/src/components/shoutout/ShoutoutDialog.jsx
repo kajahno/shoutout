@@ -5,9 +5,7 @@ import dayjs from "dayjs";
 
 // Redux
 import { connect } from "react-redux";
-import { getShoutout } from "../redux/actions/dataActions";
-
-import MyButton from "../util/MyButton";
+import { getShoutout } from "../../redux/actions/dataActions";
 
 // Icons
 import {
@@ -26,7 +24,9 @@ import {
     Typography,
 } from "@material-ui/core/";
 
+import MyButton from "../../util/MyButton";
 import LikeButton from "./LikeButton";
+import Comments from "./Comments";
 
 const styles = {
     expandButton: {
@@ -49,6 +49,11 @@ const styles = {
     invisibleSeparator: {
         border: "none",
         margin: 4,
+    },
+    visibleSeparator: {
+        width: "100%",
+        borderBottom: "1px solid rgba(0,0,0,0.1)",
+        marginBottom: 20,
     },
     spinnerDiv: {
         textAlign: "center",
@@ -86,6 +91,7 @@ class ShoutoutDialog extends Component {
                 commentCount,
                 imageUrl,
                 userHandle,
+                comments,
             },
             UI: { loading },
         } = this.props;
@@ -125,6 +131,8 @@ class ShoutoutDialog extends Component {
                     </MyButton>
                     <span>{commentCount} comments</span>
                 </Grid>
+                <hr className={classes.visibleSeparator} />
+                <Comments comments={comments} />
             </Grid>
         );
 
