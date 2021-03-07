@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
 
 import Shoutout from "../components/shoutout/Shoutout";
+import ShoutoutSkeleton from "../util/ShoutoutSkeleton";
 import Profile from "../components/profile/Profile";
 
 // Redux
@@ -25,7 +26,7 @@ export class home extends Component {
                 );
             })
         ) : (
-            <p>Loading...</p>
+            <ShoutoutSkeleton />
         );
 
         return (

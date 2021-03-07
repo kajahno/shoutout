@@ -26,6 +26,7 @@ import {
 import { connect } from "react-redux";
 import { logoutUser, uploadImage } from "../../redux/actions/userActions";
 import MyButton from "../../util/MyButton";
+import ProfileSkeleton from "../../util/ProfileSkeleton";
 
 // Icons
 
@@ -214,7 +215,7 @@ class Profile extends Component {
                 </Paper>
             )
         ) : (
-            <p>loading...</p>
+            <ProfileSkeleton />
         );
 
         return profileMarkup;

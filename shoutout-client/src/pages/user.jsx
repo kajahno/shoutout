@@ -9,7 +9,9 @@ import { getUserData } from "../redux/actions/dataActions";
 import { Grid } from "@material-ui/core";
 
 import Shoutout from "../components/shoutout/Shoutout";
+import ShoutoutSkeleton from "../util/ShoutoutSkeleton";
 import StaticProfile from "../components/profile/StaticProfile";
+import ProfileSkeleton from "../util/ProfileSkeleton";
 
 class user extends Component {
     constructor(props) {
@@ -48,7 +50,7 @@ class user extends Component {
         const { shoutoutIdParam } = this.state;
 
         const shoutoutsMarkup = loading ? (
-            <p>Loading data</p>
+            <ShoutoutSkeleton />
         ) : shoutouts === null ? (
             <>No shoutouts for this user</>
         ) : !shoutoutIdParam ? (
@@ -65,13 +67,13 @@ class user extends Component {
         );
 
         return (
-            <Grid container spacing={10}>
+            <Grid container spacing={16}>
                 <Grid item sm={8} xs={12}>
                     {shoutoutsMarkup}
                 </Grid>
                 <Grid item sm={4} xs={12}>
                     {this.state.profile === null ? (
-                        <p>Loading profile...</p>
+                        <ProfileSkeleton />
                     ) : (
                         <StaticProfile profile={this.state.profile} />
                     )}
