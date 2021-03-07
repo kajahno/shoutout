@@ -42,13 +42,15 @@ const theme = createMuiTheme({
     },
 });
 
+axios.defaults.baseURL =
+    "https://europe-west2-shoutout-2364e.cloudfunctions.net/api";
+
 const token = localStorage.FBIdToken;
 if (token) {
     const decodedToken = jwtDecode(token);
-    if (decodedToken * 1000 < Date.now()) {
+    if (decodedToken.exp * 1000 < Date.now()) {
         store.dispatch(logoutUser());
-    }
-    {
+    } else {
         store.dispatch({
             type: SET_AUTHENTICATED,
         });

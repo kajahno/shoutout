@@ -29,6 +29,7 @@ in pkgs.mkShell rec {
         export PATH="$PWD/node_modules/.bin/:$PATH"
         npx firebase --help >/dev/null || npm install firebase-tools
         npx create-react-app --help >/dev/null || npm install create-react-app
+        serve --help >/dev/null || npm install serve
         alias deploy="npx firebase deploy"
         alias serve="npx firebase serve"
         alias emulators="npx firebase emulators:start"

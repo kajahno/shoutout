@@ -207,7 +207,7 @@ class Profile extends Component {
                             variant="contained"
                             color="secondary"
                             component={Link}
-                            to="/login"
+                            to="/signup"
                         >
                             Signup
                         </Button>

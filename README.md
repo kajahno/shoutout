@@ -1,6 +1,6 @@
 ### Shoutout
 
-Basic social media app, to try out:
+Basic social media app (twitter clone), to try out:
 * react
 * firebase
 * javascript
@@ -17,6 +17,14 @@ Then install packages with:
 [nix-shell] npm install
 ```
 
+## Initialize your firebase config
+
+* run: `firebase init`
+* choose:
+  * store
+  * functions
+  * hosting
+
 ## Firebase commands:
 
 * login: `npx firebase login`
@@ -28,6 +36,7 @@ Then install packages with:
 
 ## components used
 
+### Server
 * nodejs: back-end language
   * busyboy: package to help with image uploads
 * nixpkgs: to real with the dependencies and set-up dev environment
@@ -35,6 +44,24 @@ Then install packages with:
 * express: to group http endpoints and make them more configurable
   * by default firebase's endpoints are hard to customize
 
+#### Deploy serve
+
+* run: `firebase init`
+  * mark: firestore, functions
+* run: `firebase deploy`
+
+### Client
+* ReactJs: front-end library
+* Redux: application state manager
+
+#### Building and deploying client
+
+* run: `shoutout-client $ npm run build`
+* run: `firebase init hosting`
+  * public directory: `shoutout-client/build`
+  * single-page app: `yes`
+  * incex.html exists, overwrite?: `no`
+* run: `firebase deploy --only hosting`
 ## Firebase client authentication config
 
 * Place them in an .env file
