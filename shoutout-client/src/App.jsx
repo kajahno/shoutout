@@ -11,6 +11,7 @@ import home from "./pages/home";
 import login from "./pages/login";
 import signup from "./pages/signup";
 import AuthRoute from "./util/AuthRoute";
+import user from "./pages/user";
 
 import jwtDecode from "jwt-decode";
 
@@ -71,6 +72,8 @@ function App() {
                                 path="/signup"
                                 component={signup}
                             />
+                            <Route exact path="/users/:handle" component={user} />
+
                         </Switch>
                     </div>
                 </Router>
