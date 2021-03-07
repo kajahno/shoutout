@@ -6,6 +6,7 @@ import {
     SET_UNAUTHENTICATED,
     SET_USER,
     LOADING_USER,
+    MARK_NOTIFICATIONS_READ,
 } from "../types";
 
 export const loginUser = (userData, history) => (dispatch) => {
@@ -108,4 +109,17 @@ const setAuthorizationHeader = (token) => {
     const FBIdToken = `Bearer ${token}`;
     localStorage.setItem("FBIdToken", FBIdToken);
     axios.defaults.headers.common["Authorization"] = FBIdToken;
+};
+
+export const markNotificationsRead = (notificationIds) => (dispatch) => {
+    axios
+        .post("/notifications", notificationIds)
+        .then((res) => {
+            dispatch({
+                type: MARK_NOTIFICATIONS_READ,
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 };

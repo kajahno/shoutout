@@ -88,12 +88,4 @@ class Comments extends Component {
     }
 }
 
-Comments.propTypes = {
-    getShoutout: PropTypes.func.isRequired,
-    shoutoutId: PropTypes.string.isRequired,
-    userHandle: PropTypes.string.isRequired,
-    shoutout: PropTypes.object.isRequired,
-    UI: PropTypes.object.isRequired,
-};
-
 export default withStyles(styles)(Comments);

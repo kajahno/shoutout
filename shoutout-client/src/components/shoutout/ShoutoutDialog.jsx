@@ -82,7 +82,7 @@ class ShoutoutDialog extends Component {
     }
 
     handleOpen = () => {
-        const oldPath = window.location.pathname;
+        let oldPath = window.location.pathname;
 
         const { userHandle, shoutoutId } = this.props;
         const newPath = `/users/${userHandle}/shoutout/${shoutoutId}`;
@@ -123,7 +123,7 @@ class ShoutoutDialog extends Component {
                 <CircularProgress size={200} thickness={2} />
             </div>
         ) : (
-            <Grid container spacing={16}>
+            <Grid container spacing={10}>
                 <Grid item sm={5}>
                     <img
                         src={imageUrl}

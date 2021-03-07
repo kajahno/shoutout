@@ -12,10 +12,10 @@ import { connect } from "react-redux";
 
 //Icons
 import HomeIcon from "@material-ui/icons/Home";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 
 import MyButton from "../../util/MyButton";
 import PostShoutout from "../shoutout/PostShoutout";
+import Notifications from "./Notifications";
 
 export class Navbar extends Component {
     render() {
@@ -31,9 +31,7 @@ export class Navbar extends Component {
                                     <HomeIcon />
                                 </MyButton>
                             </Link>
-                            <MyButton tip="Notifications">
-                                <NotificationsIcon />
-                            </MyButton>
+                            <Notifications />
                         </Fragment>
                     ) : (
                         <Fragment>
