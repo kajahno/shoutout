@@ -16,7 +16,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 // Redux
 import { connect } from "react-redux";
 
-
 // Icons
 import ChatIcon from "@material-ui/icons/Chat";
 
@@ -24,7 +23,6 @@ import DeleteShoutout from "./DeleteShoutout";
 import ShoutoutDialog from "./ShoutoutDialog";
 import LikeButton from "./LikeButton";
 import MyButton from "../../util/MyButton";
-
 
 const styles = {
     card: {
@@ -98,6 +96,7 @@ class Shoutout extends Component {
                     <ShoutoutDialog
                         shoutoutId={shoutoutId}
                         userHandle={userHandle}
+                        openDialog={this.props.openDialog}
                     />
                 </CardContent>
             </Card>
@@ -109,6 +108,7 @@ Shoutout.propTypes = {
     user: PropTypes.object.isRequired,
     shoutout: PropTypes.object.isRequired,
     classes: PropTypes.object.isRequired,
+    openDialog: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({

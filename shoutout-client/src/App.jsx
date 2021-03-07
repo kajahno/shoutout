@@ -72,8 +72,16 @@ function App() {
                                 path="/signup"
                                 component={signup}
                             />
-                            <Route exact path="/users/:handle" component={user} />
-
+                            <Route
+                                exact
+                                path="/users/:handle"
+                                component={user}
+                            />
+                            <Route
+                                exact
+                                path="/users/:handle/shoutout/:shoutoutId"
+                                component={user}
+                            />
                         </Switch>
                     </div>
                 </Router>

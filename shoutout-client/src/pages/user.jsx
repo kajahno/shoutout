@@ -17,11 +17,19 @@ class user extends Component {
         this.state = {
             profile: null,
             loading: false,
+            shoutoutIdParam: null,
         };
     }
 
     componentDidMount() {
         const handle = this.props.match.params.handle;
+        const shoutoutId = this.props.match.params.shoutoutId;
+        if (shoutoutId) {
+            this.setState({
+                shoutoutIdParam: shoutoutId,
+            });
+        }
+
         this.props.getUserData(handle);
         axios
             .get(`/user/${handle}`)
@@ -37,13 +45,23 @@ class user extends Component {
 
     render() {
         const { shoutouts, loading } = this.props.data;
+        const { shoutoutIdParam } = this.state;
 
         const shoutoutsMarkup = loading ? (
             <p>Loading data</p>
         ) : shoutouts === null ? (
             <>No shoutouts for this user</>
-        ) : (
+        ) : !shoutoutIdParam ? (
             shoutouts.map((s) => <Shoutout key={s.shoutoutId} shoutout={s} />)
+        ) : (
+            shoutouts.map((s) => {
+                if (s.shoutoutId === shoutoutIdParam) {
+                    return (
+                        <Shoutout key={s.shoutoutId} shoutout={s} openDialog />
+                    );
+                }
+                return <Shoutout key={s.shoutoutId} shoutout={s} />;
+            })
         );
 
         return (
